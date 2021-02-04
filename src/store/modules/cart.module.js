@@ -4,13 +4,13 @@ export default {
     namespaced: true,
     state() {
         return {
-            card: [],
+            cart: [],
             isLoaded: false
         }
     },
     getters: {
         all(state) {
-            return state.card
+            return state.cart
         },
         isLoaded(state) {
             return state.isLoaded
@@ -18,20 +18,20 @@ export default {
     },
     mutations: {
         load(state, payload) {
-            state.card = payload
+            state.cart = payload
         },
         update(state, payload) {
-            const index = state.card.findIndex(item => item.id === payload.id)
+            const index = state.cart.findIndex(item => item.id === payload.id)
 
             if (index !== -1) {
-                state.card[index] = payload
+                state.cart[index] = payload
             }
         },
         remove(state, id) {
-            const index = state.card.findIndex(item => item.id === id)
+            const index = state.cart.findIndex(item => item.id === id)
 
             if (index !== -1) {
-                state.card.splice(index, 1)
+                state.cart.splice(index, 1)
             }
         },
         loaded(state, payload) {
@@ -41,7 +41,7 @@ export default {
     actions: {
         async load({ commit }) {
             try {
-                const { data } = await dbAxios.get('/card')
+                const { data } = await dbAxios.get('/cart')
 
                 commit('load', data)
                 commit('loaded', true)
@@ -55,7 +55,7 @@ export default {
             const { id, ...item } = payload
 
             try {
-                const { data } = await dbAxios.patch(`/card/${id}`, item)
+                const { data } = await dbAxios.patch(`/cart/${id}`, item)
 
                 commit('update', data)
             } catch(e) {
@@ -64,7 +64,7 @@ export default {
         },
         async remove({ commit }, id) {
             try {
-                await dbAxios.delete(`/card/${id}`)
+                await dbAxios.delete(`/cart/${id}`)
 
                 commit('remove', id)
             } catch(e) {

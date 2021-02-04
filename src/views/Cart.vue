@@ -24,14 +24,14 @@ export default {
   components: {CartActions, CartTotal, CartTable, AppLoader },
   setup() {
     const store = useStore()
-    const items = computed(() => store.getters['card/all'])
+    const items = computed(() => store.getters['cart/all'])
 
     const total = computed(() => items.value.reduce((accumulator, current) => accumulator + current.price * current.count, 0))
 
-    const isLoading = computed(() => !store.getters['card/isLoaded'])
+    const isLoading = computed(() => !store.getters['cart/isLoaded'])
 
     const inc = item => {
-      store.dispatch('card/update', {
+      store.dispatch('cart/update', {
         ...item,
         count: item.count + 1
       })
@@ -39,17 +39,17 @@ export default {
 
     const dec = item => {
       if (item.count > 1) {
-        store.dispatch('card/update', {
+        store.dispatch('cart/update', {
           ...item,
           count: item.count - 1
         })
       } else {
-        store.dispatch('card/remove', item.id)
+        store.dispatch('cart/remove', item.id)
       }
     }
 
     onMounted(() => {
-      store.dispatch('card/load')
+      store.dispatch('cart/load')
     })
 
     return {
