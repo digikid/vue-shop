@@ -4,31 +4,13 @@
     <h1>Корзина</h1>
 
     <h3 class="text-center" v-if="!items.length">В корзине пока ничего нет</h3>
-    <table class="table" v-else>
-      <thead>
-      <tr>
-        <th>Наименование</th>
-        <th>Количество</th>
-        <th>Цена (шт)</th>
-      </tr>
-      </thead>
-      <tbody>
-      <tr v-for="item in items" :key="item.id">
-        <td>{{ item.title }}</td>
-        <td>
-          <button class="btn danger" @click="dec(item)">-</button>
-          {{ item.count }} шт.
-          <button class="btn primary" @click="inc(item)">+</button>
-        </td>
-        <td>{{ currency(item.price) }}</td>
-      </tr>
-      </tbody>
-    </table>
+
+    <CartTable v-else :items="items" @inc="inc" @dec="dec"></CartTable>
+
     <hr>
-    <p class="text-right"><strong>Всего: {{ currency(total) }}</strong></p>
-    <p class="text-right">
-      <button class="btn">Оплатить</button>
-    </p>
+    <CartTotal :total="total" />
+
+    <CartActions/>
   </div>
 </template>
 
@@ -37,10 +19,13 @@ import { computed, onMounted } from 'vue'
 import { useStore } from 'vuex'
 import { currency } from '@/utils/currency-format'
 import AppLoader from '@/components/ui/AppLoader'
+import CartTable from '@/components/cart/CartTable'
+import CartTotal from '@/components/cart/CartTotal'
+import CartActions from '@/components/cart/CartActions'
 
 export default {
   name: 'Cart',
-  components: { AppLoader },
+  components: {CartActions, CartTotal, CartTable, AppLoader },
   setup() {
     const store = useStore()
     const items = computed(() => store.getters['card/all'])

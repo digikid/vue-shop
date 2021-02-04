@@ -236,7 +236,7 @@
   "card": [
     {
       "id": "8",
-      "count": 3,
+      "count": 4,
       "title": "Баклажан",
       "category": "vegetable",
       "price": 189,
@@ -244,7 +244,7 @@
     },
     {
       "id": "15",
-      "count": 6,
+      "count": 8,
       "title": "Треска",
       "category": "fish",
       "price": 429,
