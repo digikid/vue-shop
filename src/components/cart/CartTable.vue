@@ -11,9 +11,9 @@
     <tr v-for="item in items" :key="item.id">
       <td>{{ item.title }}</td>
       <td>
-        <button class="btn danger" @click="$emit('dec', item)">-</button>
+        <button class="btn danger" @click="dec(item)">-</button>
         {{ item.count }} шт.
-        <button class="btn primary" @click="$emit('inc', item)">+</button>
+        <button class="btn primary" @click="inc(item)">+</button>
       </td>
       <td>{{ currency(item.price) }}</td>
     </tr>
@@ -22,6 +22,7 @@
 </template>
 
 <script>
+import { useCart } from '@/use/cart'
 import { currency } from '@/utils/currency-format'
 
 export default {
@@ -32,9 +33,15 @@ export default {
       required: true
     }
   },
-  emits: ['dec', 'inc'],
   setup() {
+    const {
+      inc,
+      dec
+    } = useCart()
+
     return {
+      inc,
+      dec,
       currency
     }
   }

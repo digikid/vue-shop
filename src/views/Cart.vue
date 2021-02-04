@@ -3,7 +3,7 @@
   <div class="card" v-else>
     <h1>Корзина</h1>
     <h3 class="text-center" v-if="!items.length">В корзине пока ничего нет</h3>
-    <CartTable v-else :items="items" @inc="inc" @dec="dec"></CartTable>
+    <CartTable v-else :items="items" />
     <hr>
     <CartTotal :total="total" />
     <CartActions/>
@@ -11,8 +11,8 @@
 </template>
 
 <script>
-import { computed, onMounted } from 'vue'
-import { useStore } from 'vuex'
+import { onMounted } from 'vue'
+import { useCart } from '@/use/cart'
 
 import AppLoader from '@/components/ui/AppLoader'
 import CartTable from '@/components/cart/CartTable'
@@ -23,41 +23,20 @@ export default {
   name: 'Cart',
   components: {CartActions, CartTotal, CartTable, AppLoader },
   setup() {
-    const store = useStore()
-    const items = computed(() => store.getters['cart/all'])
 
-    const total = computed(() => items.value.reduce((accumulator, current) => accumulator + current.price * current.count, 0))
+    const {
+      isLoading,
+      items,
+      total,
+      load
+    } = useCart()
 
-    const isLoading = computed(() => !store.getters['cart/isLoaded'])
-
-    const inc = item => {
-      store.dispatch('cart/update', {
-        ...item,
-        count: item.count + 1
-      })
-    }
-
-    const dec = item => {
-      if (item.count > 1) {
-        store.dispatch('cart/update', {
-          ...item,
-          count: item.count - 1
-        })
-      } else {
-        store.dispatch('cart/remove', item.id)
-      }
-    }
-
-    onMounted(() => {
-      store.dispatch('cart/load')
-    })
+    onMounted(load)
 
     return {
       isLoading,
       items,
-      total,
-      inc,
-      dec
+      total
     }
   }
 }
