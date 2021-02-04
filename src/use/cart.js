@@ -9,25 +9,25 @@ export function useCart() {
 
     const isLoading = computed(() => !store.getters['cart/isLoaded'])
 
-    const inc = item => {
-        store.dispatch('cart/update', {
+    const inc = async item => {
+        await store.dispatch('cart/update', {
             ...item,
             count: item.count + 1
         })
     }
 
-    const dec = item => {
+    const dec = async item => {
         if (item.count > 1) {
-            store.dispatch('cart/update', {
+            await store.dispatch('cart/update', {
                 ...item,
                 count: item.count - 1
             })
         } else {
-            store.dispatch('cart/remove', item.id)
+            await store.dispatch('cart/remove', item.id)
         }
     }
 
-    const load = store.dispatch('cart/load')
+    const load = async () => await store.dispatch('cart/load')
 
     return {
         items,
