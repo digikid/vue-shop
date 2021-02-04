@@ -21,7 +21,7 @@ import CartActions from '@/components/cart/CartActions'
 
 export default {
   name: 'Cart',
-  components: {CartActions, CartTotal, CartTable, AppLoader },
+  components: { CartActions, CartTotal, CartTable, AppLoader },
   setup() {
 
     const {
