@@ -13,7 +13,6 @@
 <script>
 import { computed, onMounted } from 'vue'
 import { useStore } from 'vuex'
-import { currency } from '@/utils/currency-format'
 
 import AppLoader from '@/components/ui/AppLoader'
 import CartTable from '@/components/cart/CartTable'
@@ -56,7 +55,6 @@ export default {
     return {
       isLoading,
       items,
-      currency,
       total,
       inc,
       dec
