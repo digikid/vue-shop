@@ -2,14 +2,10 @@
   <AppLoader v-if="isLoading" />
   <div class="card" v-else>
     <h1>Корзина</h1>
-
     <h3 class="text-center" v-if="!items.length">В корзине пока ничего нет</h3>
-
     <CartTable v-else :items="items" @inc="inc" @dec="dec"></CartTable>
-
     <hr>
     <CartTotal :total="total" />
-
     <CartActions/>
   </div>
 </template>
@@ -18,6 +14,7 @@
 import { computed, onMounted } from 'vue'
 import { useStore } from 'vuex'
 import { currency } from '@/utils/currency-format'
+
 import AppLoader from '@/components/ui/AppLoader'
 import CartTable from '@/components/cart/CartTable'
 import CartTotal from '@/components/cart/CartTotal'
