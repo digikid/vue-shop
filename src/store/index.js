@@ -2,7 +2,7 @@ import { createStore, createLogger } from 'vuex'
 
 import auth from '@/store/modules/auth.module'
 import products from '@/store/modules/products.module'
-import card from '@/store/modules/card.module'
+import cart from '@/store/modules/cart.module'
 
 const plugins = []
 
@@ -39,7 +39,7 @@ const store = createStore({
     modules: {
         auth,
         products,
-        card
+        cart
     },
     plugins
 })
