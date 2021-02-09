@@ -199,6 +199,46 @@
       "category": "berries",
       "price": 139,
       "img": "https://images.grocery.yandex.net/2783132/4e13bf22837b45b59fd4b3e611d5fedf/300x300.png"
+    },
+    {
+      "title": "Кукуруза",
+      "img": "https://www.oma.by/upload/iblock/a9a/a9aaf94e87c097d17f220796f5464710.jpg",
+      "price": 89,
+      "count": "14",
+      "category": "vegetable",
+      "id": "8jxPzLu"
+    },
+    {
+      "title": "Кабачок",
+      "img": "https://www.5-nt.ru/Upload/images/organic-courgette-royal-gardener@600x600.jpg",
+      "price": 49,
+      "count": "22",
+      "category": "vegetable",
+      "id": "4QPWeB_"
+    },
+    {
+      "title": "Спаржа",
+      "img": "https://pictures.attention-ngn.com/portal/185/573927/products/1565821943.4737_6_o.jpg",
+      "price": 149,
+      "count": "30",
+      "category": "vegetable",
+      "id": "OVC9E8X"
+    },
+    {
+      "title": "Манго",
+      "img": "https://fruitme.ru/wp-content/uploads/2020/04/mango-1-min.jpg",
+      "price": 229,
+      "count": "24",
+      "category": "fruit",
+      "id": "pksFKFG"
+    },
+    {
+      "title": "Кока Кола",
+      "img": "https://swo.com.ua/image/cache/catalog/9-nap/kolaa-600x600.jpg",
+      "price": 69,
+      "count": 90,
+      "category": "drinks",
+      "id": "AVYn5-o"
     }
   ],
   "categories": [
@@ -231,48 +271,50 @@
       "type": "berries",
       "title": "Ягоды",
       "id": "6"
+    },
+    {
+      "title": "Сладости",
+      "type": "desserts",
+      "id": "QBErRDY"
+    },
+    {
+      "title": "Напитки",
+      "type": "drinks",
+      "id": "FO9Bien"
     }
   ],
   "cart": [
     {
-      "id": "8",
-      "count": 5,
-      "title": "Баклажан",
-      "category": "vegetable",
-      "price": 189,
-      "img": "https://images.grocery.yandex.net/2756334/cbb08819de08460a9131a86c627bed92/300x300.png"
+      "id": "3",
+      "count": 4,
+      "title": "Апельсин",
+      "category": "fruit",
+      "price": 149,
+      "img": "https://stockmeier-food.ru/wp-content/uploads/2019/07/apelsin.jpg"
+    },
+    {
+      "id": "2",
+      "count": 1,
+      "title": "Груша",
+      "category": "fruit",
+      "price": 159,
+      "img": "https://images.grocery.yandex.net/2805921/631c3a283a994a80820c216ec51f139d/300x300.png"
+    },
+    {
+      "title": "Кока Кола",
+      "img": "https://swo.com.ua/image/cache/catalog/9-nap/kolaa-600x600.jpg",
+      "price": 69,
+      "count": 3,
+      "category": "drinks",
+      "id": "AVYn5-o"
     },
     {
       "id": "15",
-      "count": 8,
+      "count": 1,
       "title": "Треска",
       "category": "fish",
       "price": 429,
       "img": "https://images.grocery.yandex.net/2805921/b4f8c7add9874804acfae734534e1409/300x300.png"
-    },
-    {
-      "id": "19",
-      "count": 2,
-      "title": "Петрушка",
-      "category": "greens",
-      "price": 39,
-      "img": "https://images.grocery.yandex.net/2756334/6f87c8ecea5b4fb98601b901cbcf0b6f/300x300.png"
-    },
-    {
-      "id": "21",
-      "count": 1,
-      "title": "Мята",
-      "category": "greens",
-      "price": 99,
-      "img": "https://images.grocery.yandex.net/2998515/dc4c4582962e48589147b830c30cebe8/300x300.png"
-    },
-    {
-      "id": "24",
-      "count": 3,
-      "title": "Голубика",
-      "category": "berries",
-      "price": 249,
-      "img": "https://images.grocery.yandex.net/2756334/569d8814c1e548b0b4945e7bc4cd912a/300x300.png"
     }
   ]
 }

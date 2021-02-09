@@ -3,38 +3,68 @@ import { useStore } from 'vuex'
 
 export function useCart() {
     const store = useStore()
-    const items = computed(() => store.getters['cart/all'])
+    const items = computed(() => store.getters['cart/items'])
+
+    const count = computed(() => items.value.length)
 
     const total = computed(() => items.value.reduce((accumulator, current) => accumulator + current.price * current.count, 0))
 
-    const isLoading = computed(() => !store.getters['cart/isLoaded'])
+    const productCount = computed(() => product => {
+        const item = items.value.find(({id}) => id === product.id)
+
+        return item ? item.count : 0
+    })
+
+    const load = async() => await store.dispatch('cart/load')
+
+    const add = async item => {
+        await store.dispatch('cart/add', item)
+    }
 
     const inc = async item => {
+        const { id } = item
+
+        if (items.value.findIndex(item => item.id === id) === -1) {
+            await add({
+                ...item,
+                count: 0
+            })
+        }
+
+        const count = items.value.find(item => item.id === id).count
+
         await store.dispatch('cart/update', {
             ...item,
-            count: item.count + 1
+            count: count + 1
         })
     }
 
     const dec = async item => {
-        if (item.count > 1) {
-            await store.dispatch('cart/update', {
-                ...item,
-                count: item.count - 1
-            })
-        } else {
-            await store.dispatch('cart/remove', item.id)
+        const { id } = item
+
+        if (items.value.findIndex(item => item.id === id) === -1) {
+            return
         }
+
+        const count = items.value.find(item => item.id === id).count
+
+        await store.dispatch('cart/update', {
+            ...item,
+            count: count - 1
+        })
     }
 
-    const load = async () => await store.dispatch('cart/load')
+    const get = id => items.value.find(item => item.id === id)
 
     return {
         items,
+        count,
         total,
-        isLoading,
+        productCount,
+        add,
         inc,
         dec,
+        get,
         load
     }
 }

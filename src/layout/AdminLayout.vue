@@ -1,18 +1,18 @@
 <template>
-  <TheNavbar/>
+  <AdminNavbar/>
   <div class="container with-nav">
-    <AppMessage/>
+    <AppMessage />
     <RouterView/>
   </div>
 </template>
 
 <script>
-import TheNavbar from '@/components/TheNavbar'
+import AdminNavbar from '@/components/admin/AdminNavbar'
 import AppMessage from '@/components/ui/AppMessage'
 
 export default {
-  name: 'MainLayout',
-  components: { AppMessage, TheNavbar }
+  name: 'AdminLayout',
+  components: { AppMessage, AdminNavbar }
 }
 </script>
 

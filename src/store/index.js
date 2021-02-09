@@ -2,6 +2,7 @@ import { createStore, createLogger } from 'vuex'
 
 import auth from '@/store/modules/auth.module'
 import products from '@/store/modules/products.module'
+import categories from '@/store/modules/categories.module'
 import cart from '@/store/modules/cart.module'
 
 const plugins = []
@@ -31,14 +32,17 @@ const store = createStore({
         async setMessage({ commit }, message) {
             commit('setMessage', message)
 
+            window.scrollTo(0, 0);
+
             setTimeout(() => {
                 commit('clearMessage')
-            }, 5000)
+            }, 3000)
         }
     },
     modules: {
         auth,
         products,
+        categories,
         cart
     },
     plugins

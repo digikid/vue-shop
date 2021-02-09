@@ -5,6 +5,12 @@ import Shop from '@/views/Shop'
 import Product from '@/views/Product'
 import Cart from '@/views/Cart'
 import Auth from '@/views/Auth'
+import Admin from '@/views/Admin'
+import AdminProducts from '@/views/admin/AdminProducts'
+import AdminCategories from '@/views/admin/AdminCategories'
+import AdminProduct from '@/views/admin/AdminProduct'
+import AdminCategory from '@/views/admin/AdminCategory'
+import AdminHome from '@/views/admin/AdminHome'
 
 const routes = [{
     path: '/',
@@ -34,6 +40,34 @@ const routes = [{
     meta: {
         layout: 'auth'
     }
+}, {
+    path: '/admin',
+    name: 'Admin',
+    component: Admin,
+    meta: {
+        layout: 'admin',
+        auth: true
+    },
+    children: [{
+        path: '',
+        component: AdminHome
+    }, {
+        path: 'products',
+        component: AdminProducts
+    }, {
+        path: 'products/:id',
+        component: AdminProduct
+    }, {
+        path: 'categories',
+        component: AdminCategories
+    }, {
+        path: 'categories/:id',
+        component: AdminCategory
+    }]
+}, {
+    path: '/:notFound(.*)',
+    name: '404',
+    redirect: '/'
 }]
 
 const router = createRouter({
@@ -46,13 +80,11 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
     const requiredAuth = to.meta.auth
 
-    if (requiredAuth && store.getters['auth/isAuthenticated']) {
-        next()
-    } else if (requiredAuth && !store.getters['auth/isAuthenticated']) {
+    if (requiredAuth && !store.getters['auth/isAuthenticated']) {
         next('/auth?message=auth')
-    } else {
-        next()
     }
+
+    next()
 })
 
 export default router

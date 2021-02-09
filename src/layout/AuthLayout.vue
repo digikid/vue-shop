@@ -9,7 +9,7 @@
 import AppMessage from '@/components/ui/AppMessage'
 export default {
   name: 'AuthLayout',
-  components: {AppMessage}
+  components: { AppMessage }
 }
 </script>
 
