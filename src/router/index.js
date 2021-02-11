@@ -44,19 +44,19 @@ const routes = [{
     },
     children: [{
         path: '',
-        component: () => import(/* webpackChunkName: "admin" */'@/views/admin/AdminHome.vue')
+        component: () => import(/* webpackChunkName: "admin" */'@/views/admin/Home.vue')
     }, {
         path: 'products',
-        component: () => import(/* webpackChunkName: "admin" */'@/views/admin/AdminProducts.vue')
+        component: () => import(/* webpackChunkName: "admin" */'@/views/admin/Products.vue')
     }, {
         path: 'products/:id',
-        component: () => import(/* webpackChunkName: "admin" */'@/views/admin/AdminProduct.vue')
+        component: () => import(/* webpackChunkName: "admin" */'@/views/admin/Product.vue')
     }, {
         path: 'categories',
-        component: () => import(/* webpackChunkName: "admin" */'@/views/admin/AdminCategories.vue')
+        component: () => import(/* webpackChunkName: "admin" */'@/views/admin/Categories.vue')
     }, {
         path: 'categories/:id',
-        component: () => import(/* webpackChunkName: "admin" */'@/views/admin/AdminCategory.vue')
+        component: () => import(/* webpackChunkName: "admin" */'@/views/admin/Category.vue')
     }]
 }, {
     path: '/:notFound(.*)',
