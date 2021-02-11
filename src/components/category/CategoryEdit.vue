@@ -25,22 +25,33 @@
       <AppButton
           type="primary"
           :text="id ? 'Сохранить' : 'Добавить'"
+          :disabled="!hasChanged"
           @action="onSubmit"
       />
     </div>
   </form>
+  <AppConfirm
+      title="Изменения не будут сохранены"
+      v-if="isConfirmOpen"
+      @accept="onConfirmAccept"
+      @reject="onConfirmReject"
+  >
+    <p>Вы уверены, что хотите уйти со страницы?</p>
+  </AppConfirm>
 </template>
 
 <script>
 import { ref, computed } from 'vue'
 import { useRoute } from 'vue-router'
 import { useCategories } from '@/use/categories'
+import { useConfirm } from '@/use/confirm'
 
 import AppButton from '@/components/ui/AppButton'
+import AppConfirm from '@/components/ui/AppConfirm'
 
 export default {
   name: 'CategoryEdit',
-  components: { AppButton },
+  components: { AppConfirm, AppButton },
   props: {
     action: {
       type: Function
@@ -63,15 +74,20 @@ export default {
     const title = ref(id ? category.value.title : '')
     const type = ref(id ? category.value.type : '')
 
+    const model = computed(() => ({
+      title: title.value,
+      type: type.value
+    }))
+
+    const hasChanged = computed(() => id ?
+        Object.keys(model.value).reduce((acc, key) => acc || (category.value[key] !== model.value[key]), false) :
+        Object.keys(model.value).reduce((acc, key) => acc && (model.value[key] !== ''), true)
+    )
+
     const showAlerts = ref()
 
     const onSubmit = async () => {
-      const item = {
-        title: title.value,
-        type: type.value
-      }
-
-      if (!item.title || !item.type) {
+      if (!model.value.title || !model.value.type) {
         showAlerts.value = true
         return
       }
@@ -79,10 +95,10 @@ export default {
       if (id) {
         await update({
           id,
-          ...item
+          ...model.value
         })
       } else {
-        await add(item)
+        await add(model.value)
       }
 
       emit('action')
@@ -93,8 +109,10 @@ export default {
       categories,
       title,
       type,
+      hasChanged,
       showAlerts,
-      onSubmit
+      onSubmit,
+      ...useConfirm(hasChanged)
     }
   }
 }

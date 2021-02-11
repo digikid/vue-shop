@@ -5,12 +5,6 @@ import Shop from '@/views/Shop'
 import Product from '@/views/Product'
 import Cart from '@/views/Cart'
 import Auth from '@/views/Auth'
-import Admin from '@/views/Admin'
-import AdminProducts from '@/views/admin/AdminProducts'
-import AdminCategories from '@/views/admin/AdminCategories'
-import AdminProduct from '@/views/admin/AdminProduct'
-import AdminCategory from '@/views/admin/AdminCategory'
-import AdminHome from '@/views/admin/AdminHome'
 
 const routes = [{
     path: '/',
@@ -43,26 +37,26 @@ const routes = [{
 }, {
     path: '/admin',
     name: 'Admin',
-    component: Admin,
+    component: () => import(/* webpackChunkName: "admin" */'@/views/Admin.vue'),
     meta: {
         layout: 'admin',
         auth: true
     },
     children: [{
         path: '',
-        component: AdminHome
+        component: () => import(/* webpackChunkName: "admin" */'@/views/admin/AdminHome.vue')
     }, {
         path: 'products',
-        component: AdminProducts
+        component: () => import(/* webpackChunkName: "admin" */'@/views/admin/AdminProducts.vue')
     }, {
         path: 'products/:id',
-        component: AdminProduct
+        component: () => import(/* webpackChunkName: "admin" */'@/views/admin/AdminProduct.vue')
     }, {
         path: 'categories',
-        component: AdminCategories
+        component: () => import(/* webpackChunkName: "admin" */'@/views/admin/AdminCategories.vue')
     }, {
         path: 'categories/:id',
-        component: AdminCategory
+        component: () => import(/* webpackChunkName: "admin" */'@/views/admin/AdminCategory.vue')
     }]
 }, {
     path: '/:notFound(.*)',

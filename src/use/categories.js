@@ -25,7 +25,7 @@ export function useCategories() {
     const update = async item => {
         await store.dispatch('categories/update', item)
 
-        router.push('/admin/categories')
+        router.go(-1)
     }
 
     const remove = async ({ id }) => {
@@ -34,7 +34,6 @@ export function useCategories() {
                 value: 'Невозможно удалить категорию, так как она содержит товары',
                 type: 'danger'
             })
-            return
         } else {
             await store.dispatch('categories/remove', id)
         }

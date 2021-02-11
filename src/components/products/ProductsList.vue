@@ -1,6 +1,6 @@
 <template>
   <div
-      v-if="products"
+      v-if="products.length"
       class="products-table"
   >
     <ProductCard
@@ -9,18 +9,23 @@
         :product="product"
     />
   </div>
-  <p class="empty" v-else>Каталог продуктов пуст.</p>
+  <p
+      class="empty"
+      v-else
+  >
+    Каталог продуктов пуст.
+  </p>
 </template>
 
 <script>
-
 import ProductCard from '@/components/product/ProductCard'
 
 export default {
   name: 'ProductsList',
   components: { ProductCard },
   props: {
-    products: Array
+    products: Array,
+    default: []
   }
 }
 </script>

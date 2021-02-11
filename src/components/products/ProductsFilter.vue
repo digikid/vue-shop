@@ -13,12 +13,14 @@
         Все
       </li>
       <li
-          class="list-item"
-          v-for="category in categories"
-          :key="category.id"
-          @click="changeCategory(category.type)"
+          v-for="cat in categories"
+          :key="cat.id"
+          :class="['list-item', {
+            'is-active': cat.type === category
+          }]"
+          @click="changeCategory(cat.type)"
       >
-        {{ category.title }}
+        {{ cat.title }}
       </li>
     </ul>
   </div>
@@ -69,6 +71,7 @@ export default {
 
 <style scoped>
 .is-active {
-  background: #eee;
+  color: #fff;
+  background: #3eaf7c !important;
 }
 </style>

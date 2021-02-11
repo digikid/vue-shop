@@ -11,10 +11,10 @@
     </thead>
     <tbody>
     <tr
-        v-for="(category, i) in categories"
+        v-for="(category, i) in pages[current]"
         :key="category.id"
     >
-      <td>{{ i + 1 }}</td>
+      <td>{{ index(i) }}</td>
       <td>{{ category.title }}</td>
       <td>{{ category.type }}</td>
       <td>{{ productsTotal(category) }}</td>
@@ -27,28 +27,36 @@
             type="primary"
             text="Изменить"
             @action="edit(category)"
-            :disabled="productsTotal(category)"
         />
         <AppButton
             type="danger"
             text="Удалить"
             @action="remove(category)"
-            :disabled="productsTotal(category)"
+            v-if="!productsTotal(category)"
         />
       </td>
     </tr>
     </tbody>
   </table>
+  <AppPagination
+      :items="pages"
+      :current="current"
+      @to="to"
+      @next="next"
+      @prev="prev"
+  />
 </template>
 
 <script>
 import { useCategories } from '@/use/categories'
+import { usePagination } from '@/use/pagination'
 
 import AppButton from '@/components/ui/AppButton'
+import AppPagination from '@/components/ui/AppPagination'
 
 export default {
   name: 'AdminCategoriesList',
-  components: { AppButton },
+  components: { AppPagination, AppButton },
   setup() {
     const {
       items: categories,
@@ -63,7 +71,8 @@ export default {
       productsTotal,
       open,
       edit,
-      remove
+      remove,
+      ...usePagination(categories)
     }
   }
 }

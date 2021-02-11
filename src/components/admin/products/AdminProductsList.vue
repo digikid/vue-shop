@@ -13,10 +13,10 @@
     </thead>
     <tbody>
       <tr
-          v-for="(product, i) in products"
+          v-for="(product, i) in pages[current]"
           :key="product.id"
       >
-        <td>{{ i + 1 }}</td>
+        <td>{{ index(i) }}</td>
         <td>{{ product.title }}</td>
         <td>
           <img :src="product.img" :alt="product.title">
@@ -32,16 +32,25 @@
       </tr>
     </tbody>
   </table>
+  <AppPagination
+      :items="pages"
+      :current="current"
+      @to="to"
+      @next="next"
+      @prev="prev"
+  />
 </template>
 
 <script>
 import { useProducts } from '@/use/products'
+import { usePagination } from '@/use/pagination'
 
 import AppButton from '@/components/ui/AppButton'
+import AppPagination from '@/components/ui/AppPagination'
 
 export default {
   name: 'AdminProductsList',
-  components: { AppButton },
+  components: { AppPagination, AppButton },
   setup() {
     const {
       items: products,
@@ -58,7 +67,8 @@ export default {
       price,
       open,
       edit,
-      remove
+      remove,
+      ...usePagination(products)
     }
   }
 }

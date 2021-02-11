@@ -239,6 +239,14 @@
       "count": 90,
       "category": "drinks",
       "id": "AVYn5-o"
+    },
+    {
+      "title": "Морс",
+      "img": "https://www.chanakhi.ru/wp-content/uploads/2018/11/mors-600x600.jpg",
+      "price": 69,
+      "count": 40,
+      "category": "drinks",
+      "id": "lXWoayg"
     }
   ],
   "categories": [
@@ -273,20 +281,20 @@
       "id": "6"
     },
     {
-      "title": "Сладости",
-      "type": "desserts",
-      "id": "QBErRDY"
-    },
-    {
       "title": "Напитки",
       "type": "drinks",
       "id": "FO9Bien"
+    },
+    {
+      "title": "Выпечка",
+      "type": "pastry",
+      "id": "ayG9uHw"
     }
   ],
   "cart": [
     {
       "id": "3",
-      "count": 4,
+      "count": 6,
       "title": "Апельсин",
       "category": "fruit",
       "price": 149,
@@ -315,6 +323,22 @@
       "category": "fish",
       "price": 429,
       "img": "https://images.grocery.yandex.net/2805921/b4f8c7add9874804acfae734534e1409/300x300.png"
+    },
+    {
+      "id": "18",
+      "count": 4,
+      "title": "Шпинат",
+      "category": "greens",
+      "price": 69,
+      "img": "https://images.grocery.yandex.net/2783132/1e72718cfd11452a8ed4ed04aee8c033/300x300.png"
+    },
+    {
+      "title": "Морс",
+      "img": "https://www.chanakhi.ru/wp-content/uploads/2018/11/mors-600x600.jpg",
+      "price": 69,
+      "count": 2,
+      "category": "drinks",
+      "id": "lXWoayg"
     }
   ]
 }

@@ -48,7 +48,7 @@ export function useProducts() {
     const update = async item => {
         await store.dispatch('products/update', item)
 
-        router.push('/admin/products')
+        router.go(-1)
     }
 
     const remove = async ({ id }) => await store.dispatch('products/remove', id)
@@ -62,7 +62,7 @@ export function useProducts() {
             }
         })
 
-        router.push({
+        router.replace({
             query
         })
     })

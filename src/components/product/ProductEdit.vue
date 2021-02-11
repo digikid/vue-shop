@@ -52,10 +52,19 @@
       <AppButton
           type="primary"
           :text="id ? 'Сохранить' : 'Добавить'"
+          :disabled="!hasChanged"
           @action="onSubmit"
       />
     </div>
   </form>
+  <AppConfirm
+      title="Изменения не будут сохранены"
+      v-if="isConfirmOpen"
+      @accept="onConfirmAccept"
+      @reject="onConfirmReject"
+  >
+    <p>Вы уверены, что хотите уйти со страницы?</p>
+  </AppConfirm>
 </template>
 
 <script>
@@ -63,12 +72,14 @@ import { ref, computed } from 'vue'
 import { useRoute } from 'vue-router'
 import { useProducts } from '@/use/products'
 import { useCategories } from '@/use/categories'
+import { useConfirm } from '@/use/confirm'
 
 import AppButton from '@/components/ui/AppButton'
+import AppConfirm from '@/components/ui/AppConfirm'
 
 export default {
   name: 'ProductEdit',
-  components: { AppButton },
+  components: { AppConfirm, AppButton },
   props: {
     action: {
       type: Function
@@ -98,18 +109,23 @@ export default {
     const count = ref(id ? product.value.count : '')
     const category = ref(id ? product.value.category : '')
 
+    const model = computed(() => ({
+      title: title.value,
+      img: img.value,
+      price: Number(price.value),
+      count: Number(count.value),
+      category: category.value
+    }))
+
+    const hasChanged = computed(() => id ?
+        Object.keys(model.value).reduce((acc, key) => acc || (product.value[key] !== model.value[key]), false) :
+        Object.keys(model.value).reduce((acc, key) => acc && (model.value[key] !== ''), true)
+    )
+
     const showAlerts = ref()
 
     const onSubmit = async () => {
-      const item = {
-        title: title.value,
-        img: img.value,
-        price: Number(price.value),
-        count: Number(count.value),
-        category: category.value
-      }
-
-      if (!item.title || !item.img || !item.category || item.price === '' || item.count === '') {
+      if (!model.value.title || !model.value.img || !model.value.category) {
         showAlerts.value = true
         return
       }
@@ -117,10 +133,10 @@ export default {
       if (id) {
         await update({
           id,
-          ...item
+          ...model.value
         })
       } else {
-        await add(item)
+        await add(model.value)
       }
 
       emit('action')
@@ -134,8 +150,10 @@ export default {
       price,
       count,
       category,
+      hasChanged,
       showAlerts,
-      onSubmit
+      onSubmit,
+      ...useConfirm(hasChanged)
     }
   }
 }
