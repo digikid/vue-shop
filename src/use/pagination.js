@@ -1,7 +1,7 @@
 import { ref, computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
-export function usePagination(items = [], limit = 5) {
+export function usePagination(items = [], limit = 10) {
     const route = useRoute()
     const router = useRouter()
 
