@@ -1,5 +1,5 @@
 import axios from 'axios'
-// import router from '@/router'
+import router from '@/router'
 
 const dbAxios = axios.create({
     baseURL: process.env.VUE_APP_DB_URL
@@ -7,7 +7,7 @@ const dbAxios = axios.create({
 
 dbAxios.interceptors.response.use( null, error => {
     if (error.response.status === 401) {
-        // router.push('/auth?message=auth')
+        router.push('/auth?message=auth')
     }
 
     return Promise.reject(error)
