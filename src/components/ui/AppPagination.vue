@@ -1,5 +1,5 @@
 <template>
-  <nav class="pagination">
+  <nav class="pagination" v-if="items.length > 1">
     <ul class="pagination__list">
       <li :class="['pagination__item', 'pagination__item--next', {
         'is-disabled': !current
