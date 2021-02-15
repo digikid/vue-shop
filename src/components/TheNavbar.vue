@@ -3,7 +3,7 @@
     <h3>
       <RouterLink
           to="/admin"
-          v-if="isAdmin"
+          v-if="isAdminLayout && isAdmin"
       >
         Админка
       </RouterLink>
@@ -16,13 +16,19 @@
     </h3>
     <ul
         class="navbar-menu"
-        v-if="isAdmin"
+        v-if="isAdminLayout && isAdmin"
     >
+      <li>
+        <RouterLink to="/admin/orders">Заказы</RouterLink>
+      </li>
       <li>
         <RouterLink to="/admin/products">Товары</RouterLink>
       </li>
       <li>
         <RouterLink to="/admin/categories">Категории</RouterLink>
+      </li>
+      <li>
+        <RouterLink to="/admin/users">Пользователи</RouterLink>
       </li>
       <li>
         <RouterLink to="/">В магазин</RouterLink>
@@ -41,13 +47,22 @@
       <li>
         <RouterLink to="/cart">Корзина <i v-if="cartCount">{{ cartCount }}</i></RouterLink>
       </li>
-      <li v-if="isAuthenticated">
+      <li v-if="isAuthenticated && isAdmin">
         <RouterLink to="/admin">В админку</RouterLink>
+      </li>
+      <li v-if="!isAuthenticated">
+        <RouterLink to="/auth">Войти</RouterLink>
       </li>
       <li v-if="isAuthenticated">
         <a @click="logout">Выйти</a>
       </li>
     </ul>
+    <div
+        v-if="user"
+        :class="['navbar-user', user.role]"
+    >
+      {{ user.name }}
+    </div>
   </nav>
 </template>
 
@@ -60,20 +75,24 @@ import { useAuth } from '@/use/auth'
 export default {
   name: 'TheNavbar',
   setup() {
-    const { count: cartCount } = useCart()
+    const route = useRoute()
+    const isAdminLayout = ref(route.meta.layout === 'admin')
 
     const {
       isAuthenticated,
+      isAdmin,
+      user,
       logout
     } = useAuth()
 
-    const route = useRoute()
-    const isAdmin = ref(route.meta.layout === 'admin')
+    const { count: cartCount } = useCart()
 
     return {
+      user,
+      isAdminLayout,
       isAdmin,
-      cartCount,
       isAuthenticated,
+      cartCount,
       logout
     }
   }
@@ -81,13 +100,23 @@ export default {
 </script>
 
 <style scoped>
-.navbar li {
+.navbar {
+  align-items: center;
+}
+
+.navbar-menu {
+  display: flex;
+  justify-content: flex-end;
+  flex-grow: 1;
+}
+
+.navbar-menu li {
   position: relative;
   padding-right: 15px;
   margin-right: 1rem;
 }
 
-.navbar li i {
+.navbar-menu li i {
   position: absolute;
   top: -5px;
   right: 0;
@@ -104,5 +133,29 @@ export default {
   color: #fff;
   background: #c25205;
   border-radius: 50%;
+}
+
+.navbar-user {
+  position: relative;
+  font-size: 14px;
+  color: #777;
+  padding-left: 35px;
+}
+
+.navbar-user:before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 20px;
+  height: 20px;
+  background-image: url('/assets/user.svg');
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+}
+
+.navbar-user.admin:before {
+  background-image: url('/assets/admin.svg');
 }
 </style>

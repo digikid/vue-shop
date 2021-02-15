@@ -42,7 +42,7 @@ export default {
     } = useCategories()
 
     const title = ref('')
-    const category = ref()
+    const category = ref('')
 
     const changeCategory = type => category.value = type
 
@@ -51,12 +51,10 @@ export default {
       category.value = ''
     }
 
-    watch([title, category], values => {
-      emit('update:filter', {
-        title: values[0],
-        category: values[1]
-      })
-    })
+    watch([title, category], values => emit('update:filter', {
+      title: values[0],
+      category: values[1]
+    }))
 
     return {
       categories,

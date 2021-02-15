@@ -234,7 +234,7 @@
     },
     {
       "title": "Кока Кола",
-      "img": "https://swo.com.ua/image/cache/catalog/9-nap/kolaa-600x600.jpg",
+      "img": "https://static.tildacdn.com/tild6533-3766-4563-a461-333631313338/steklo.jpg",
       "price": 69,
       "count": 90,
       "category": "drinks",
@@ -339,6 +339,14 @@
       "count": 2,
       "category": "drinks",
       "id": "lXWoayg"
+    },
+    {
+      "id": "1",
+      "count": 3,
+      "title": "Яблоко",
+      "category": "fruit",
+      "price": 99,
+      "img": "https://images.grocery.yandex.net/2783132/a14b43cfbbac4898b5a89fd1e52c0029/300x300.png"
     }
   ]
 }

@@ -1,13 +1,23 @@
-import { useField, useForm } from 'vee-validate'
 import * as yup from 'yup'
+import { useField, useForm } from 'vee-validate'
 import { computed, watch } from 'vue'
 import { useStore } from 'vuex'
-import { useRouter } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 
-export function useLoginForm() {
+export function useSingUpForm() {
     const store = useStore()
     const router = useRouter()
+    const route = useRoute()
+
     const { handleSubmit, isSubmitting, submitCount } = useForm()
+
+    const { value: name, errorMessage: nameError, handleBlur: nameBlur } = useField(
+        'name',
+        yup
+            .string()
+            .trim()
+            .required('Пожалуйста, введите имя')
+    )
 
     const { value: email, errorMessage: emailError, handleBlur: emailBlur } = useField(
         'email',
@@ -29,12 +39,21 @@ export function useLoginForm() {
             .min(passwordLength, `Длина пароля должна быть больше ${passwordLength} символов`)
     )
 
-    const isTooManyAttempts = computed(() => submitCount.value >=3 )
+    const isTooManyAttempts = computed(() => submitCount.value >= 3)
+
+    const isAdmin = computed(() => store.getters['auth/isAdmin'])
 
     const onSubmit = handleSubmit(async values => {
         try {
-            await store.dispatch('auth/login', values)
-            router.push('/admin')
+            await store.dispatch('auth/signUp', {
+                ...values,
+                role: 'user'
+            })
+
+            if (route.path === '/auth') {
+                const path = isAdmin.value ? '/admin' : '/'
+                router.push(path)
+            }
         } catch(e) {
             console.log(e)
         }
@@ -47,6 +66,9 @@ export function useLoginForm() {
     })
 
     return {
+        name,
+        nameError,
+        nameBlur,
         email,
         emailError,
         emailBlur,

@@ -1,24 +1,23 @@
 # vue-shop
 
-## Project setup
+Итоговая курсовая работа к практическому курсу [«Vue 3 Pro»](https://vladilen.ru/vue).
+
+## Ссылка на приложение
+[https://vue-shop-3fa1e.web.app/](https://vue-shop-3fa1e.web.app/)
+
+## Доступы
+Для авторизации перейдите к оплате товара или воспользуйтесь [этой страницей](https://vue-shop-3fa1e.web.app/auth).
+
+### Администратор
+Имеет доступ к панели администрирования, может совершать покупки.
 ```
-npm install
+admin@mail.ru
+123456
 ```
 
-### Compiles and hot-reloads for development
+### Пользователь
+Не имеет доступа к панели управления, может совершать покупки.
 ```
-npm run serve
+user@mail.ru
+123456
 ```
-
-### Compiles and minifies for production
-```
-npm run build
-```
-
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).

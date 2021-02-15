@@ -32,7 +32,7 @@ const routes = [{
     name: 'Auth',
     component: Auth,
     meta: {
-        layout: 'auth'
+        layout: 'main'
     }
 }, {
     path: '/admin',
@@ -44,7 +44,8 @@ const routes = [{
     },
     children: [{
         path: '',
-        component: () => import(/* webpackChunkName: "admin" */'@/views/admin/Home.vue')
+        component: () => import(/* webpackChunkName: "admin" */'@/views/admin/Orders.vue'),
+        alias: 'orders'
     }, {
         path: 'products',
         component: () => import(/* webpackChunkName: "admin" */'@/views/admin/Products.vue')
@@ -57,6 +58,12 @@ const routes = [{
     }, {
         path: 'categories/:id',
         component: () => import(/* webpackChunkName: "admin" */'@/views/admin/Category.vue')
+    }, {
+        path: 'users',
+        component: () => import(/* webpackChunkName: "admin" */'@/views/admin/Users.vue')
+    }, {
+        path: 'users/:id',
+        component: () => import(/* webpackChunkName: "admin" */'@/views/admin/User.vue')
     }]
 }, {
     path: '/:notFound(.*)',

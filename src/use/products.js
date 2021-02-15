@@ -1,7 +1,7 @@
 import { ref, computed, watch, onMounted } from 'vue'
 import { useStore } from 'vuex'
 import { useRouter, useRoute } from 'vue-router'
-import { currency } from '@/utils/currency-format'
+import { currency } from '@/utils/format/currency'
 
 export function useProducts() {
     const store = useStore()

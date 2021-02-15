@@ -1,16 +1,16 @@
 <template>
   <AppPage title="Редактирование категории" back>
-    <CategoryEdit />
+    <AdminCategoriesEdit />
   </AppPage>
 </template>
 
 <script>
 import AppPage from '@/components/ui/AppPage'
-import CategoryEdit from '@/components/category/CategoryEdit'
+import AdminCategoriesEdit from '@/components/admin/categories/AdminCategoriesEdit'
 
 export default {
   name: 'AdminCategory',
-  components: { CategoryEdit, AppPage }
+  components: { AdminCategoriesEdit, AppPage }
 }
 </script>
 

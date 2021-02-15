@@ -15,17 +15,13 @@ export function useCart() {
         return item ? item.count : 0
     })
 
-    const load = async() => await store.dispatch('cart/load')
+    const add = item => store.commit('cart/add', item)
 
-    const add = async item => {
-        await store.dispatch('cart/add', item)
-    }
-
-    const inc = async item => {
+    const inc = item => {
         const { id } = item
 
         if (items.value.findIndex(item => item.id === id) === -1) {
-            await add({
+             add({
                 ...item,
                 count: 0
             })
@@ -33,13 +29,13 @@ export function useCart() {
 
         const count = items.value.find(item => item.id === id).count
 
-        await store.dispatch('cart/update', {
+        store.commit('cart/update', {
             ...item,
             count: count + 1
         })
     }
 
-    const dec = async item => {
+    const dec = item => {
         const { id } = item
 
         if (items.value.findIndex(item => item.id === id) === -1) {
@@ -48,7 +44,7 @@ export function useCart() {
 
         const count = items.value.find(item => item.id === id).count
 
-        await store.dispatch('cart/update', {
+        store.commit('cart/update', {
             ...item,
             count: count - 1
         })
@@ -64,7 +60,6 @@ export function useCart() {
         add,
         inc,
         dec,
-        get,
-        load
+        get
     }
 }

@@ -23,7 +23,7 @@
 
 <script>
 import { useCart } from '@/use/cart'
-import { currency } from '@/utils/currency-format'
+import { currency } from '@/utils/format/currency'
 
 export default {
   name: 'CartTable',

@@ -9,10 +9,9 @@
 <script>
 import { computed, onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
-
 import { useProducts } from '@/use/products'
 import { useCategories } from '@/use/categories'
-import { useCart } from '@/use/cart'
+import { useUsers } from '@/use/users'
 
 import MainLayout from '@/layout/MainLayout'
 import AuthLayout from '@/layout/AuthLayout'
@@ -28,7 +27,7 @@ export default {
 
     const { load: loadProducts } = useProducts()
     const { load: loadCategories } = useCategories()
-    const { load: loadCart } = useCart()
+    const { load: loadUsers } = useUsers()
 
     const isLoading = ref()
 
@@ -36,7 +35,7 @@ export default {
       isLoading.value = true
       await loadProducts()
       await loadCategories()
-      await loadCart()
+      await loadUsers()
       isLoading.value = false
     })
 

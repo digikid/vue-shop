@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import { currency } from '@/utils/currency-format'
+import { currency } from '@/utils/format/currency'
 
 export default {
   name: 'CartTotal',

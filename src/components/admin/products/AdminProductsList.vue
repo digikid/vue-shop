@@ -1,5 +1,5 @@
 <template>
-  <table class="table">
+  <table class="table" v-if="products.length">
     <thead>
       <tr>
         <th>#</th>
@@ -32,6 +32,7 @@
       </tr>
     </tbody>
   </table>
+  <p v-else>Ничего не найдено.</p>
   <AppPagination
       :items="pages"
       :current="current"
@@ -42,6 +43,7 @@
 </template>
 
 <script>
+import { computed } from 'vue'
 import { useProducts } from '@/use/products'
 import { usePagination } from '@/use/pagination'
 
@@ -51,15 +53,19 @@ import AppPagination from '@/components/ui/AppPagination'
 export default {
   name: 'AdminProductsList',
   components: { AppPagination, AppButton },
-  setup() {
+  props: {
+    items: Array
+  },
+  setup(props) {
     const {
-      items: products,
       category,
       price,
       open,
       edit,
       remove
     } = useProducts()
+
+    const products = computed(() => props.items)
 
     return {
       products,

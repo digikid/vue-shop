@@ -3,28 +3,39 @@
     <template #header>
       <AppButton type="primary" text="Добавить" @action="modalIsOpen = true" />
     </template>
-    <AdminProductsList />
-    <AppModal title="Добавить товар" @close="modalIsOpen = false" v-if="modalIsOpen">
-      <ProductEdit @action="modalIsOpen = false" />
-    </AppModal>
+    <AdminProductsFilter v-model:filter="filter" />
+    <AdminProductsList :items="products" />
   </AppPage>
+  <AppModal title="Добавить товар" @close="modalIsOpen = false" v-if="modalIsOpen">
+    <AdminProductsEdit @action="modalIsOpen = false" />
+  </AppModal>
 </template>
 
 <script>
 import { ref } from 'vue'
+import { useProducts } from '@/use/products'
+
 import AppPage from '@/components/ui/AppPage'
 import AppButton from '@/components/ui/AppButton'
-import AdminProductsList from '@/components/admin/products/AdminProductsList'
 import AppModal from '@/components/ui/AppModal'
-import ProductEdit from '@/components/product/ProductEdit'
+import AdminProductsFilter from '@/components/admin/products/AdminProductsFilter'
+import AdminProductsList from '@/components/admin/products/AdminProductsList'
+import AdminProductsEdit from '@/components/admin/products/AdminProductsEdit'
 
 export default {
   name: 'AdminProducts',
-  components: { ProductEdit, AppModal, AdminProductsList, AppButton, AppPage },
+  components: { AdminProductsFilter, AdminProductsList, AdminProductsEdit, AppModal, AppButton, AppPage },
   setup() {
+    const {
+      items: products,
+      filter
+    } = useProducts()
+
     const modalIsOpen = ref()
 
     return {
+      products,
+      filter,
       modalIsOpen
     }
   }
