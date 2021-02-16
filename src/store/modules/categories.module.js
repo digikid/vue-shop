@@ -70,7 +70,7 @@ export default {
 
             try {
                 const token = store.getters['auth/token']
-                await dbAxios.put(`/categories/${id}.json?auth=${token}`, item)
+                await dbAxios.patch(`/categories/${id}.json?auth=${token}`, item)
 
                 commit('update', payload)
             } catch(e) {
