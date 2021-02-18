@@ -28,7 +28,6 @@
             type="danger"
             text="Удалить"
             @action="remove(user)"
-            v-if="user.role !== 'admin'"
         />
       </td>
     </tr>

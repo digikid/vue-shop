@@ -7,18 +7,15 @@ export function useAuth() {
     const router = useRouter()
 
     const isAuthenticated = computed(() => store.getters['auth/isAuthenticated'])
-    const isAdmin = computed(() => store.getters['auth/isAdmin'])
-    const user = computed(() => store.getters['auth/user'])
 
     const logout = () => {
         store.commit('auth/logout')
+        store.commit('users/reset')
         router.push('/auth')
     }
 
     return {
-        user,
         isAuthenticated,
-        isAdmin,
         logout
     }
 }

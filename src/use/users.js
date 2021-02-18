@@ -6,12 +6,22 @@ export function useUsers() {
     const store = useStore()
     const router = useRouter()
 
-    const roles = {
-        admin: 'Администратор',
-        user: 'Пользователь'
-    }
+    const items = computed(() => store.getters['users/items'].sort((a, b) => {
+        if (a.role === 'admin' && b.role !== 'admin') {
+            return -1
+        }
 
-    const items = computed(() => store.getters['users/items'])
+        if (a.role !== 'admin' && b.role === 'admin') {
+            return 1
+        }
+
+        return 0
+    }))
+
+    const roles = computed(() => store.getters['users/roles'])
+
+    const user = computed(() => store.getters['users/current'])
+    const isAdmin = computed(() => store.getters['users/isAdmin'])
 
     const load = async() => await store.dispatch('users/load')
 
@@ -31,6 +41,8 @@ export function useUsers() {
 
     return {
         items,
+        user,
+        isAdmin,
         roles,
         load,
         create,

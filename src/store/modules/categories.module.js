@@ -1,5 +1,4 @@
 import dbAxios from '@/axios/db'
-import store from '@/store'
 
 export default {
     namespaced: true,
@@ -54,8 +53,7 @@ export default {
         },
         async add({ commit }, payload) {
             try {
-                const token = store.getters['auth/token']
-                const { data } = await dbAxios.post(`/categories.json?auth=${token}`, payload)
+                const { data } = await dbAxios.post('/categories.json', payload)
 
                 commit('add', {
                     ...payload,
@@ -69,8 +67,7 @@ export default {
             const { id, ...item } = payload
 
             try {
-                const token = store.getters['auth/token']
-                await dbAxios.patch(`/categories/${id}.json?auth=${token}`, item)
+                await dbAxios.patch(`/categories/${id}.json`, item)
 
                 commit('update', payload)
             } catch(e) {
@@ -79,8 +76,7 @@ export default {
         },
         async remove({ commit }, id) {
             try {
-                const token = store.getters['auth/token']
-                await dbAxios.delete(`/categories/${id}.json?auth=${token}`)
+                await dbAxios.delete(`/categories/${id}.json`)
 
                 commit('remove', id)
             } catch(e) {

@@ -1,23 +1,50 @@
-import dbAxios from '@/axios/db'
-import store from '@/store'
 import axios from 'axios'
+import dbAxios from '@/axios/db'
 import { error } from '@/utils/error'
+
+const FB_KEY = process.env.VUE_APP_FB_KEY
+const SIGN_UP_URL = process.env.VUE_APP_SIGN_UP_URL
+const USER_KEY = process.env.VUE_APP_USER_KEY
 
 export default {
     namespaced: true,
     state() {
         return {
-            users: []
+            users: [],
+            roles: {
+                admin: 'Администратор',
+                user: 'Пользователь'
+            },
+            current: JSON.parse(localStorage.getItem(USER_KEY))
         }
     },
     getters: {
         items(state) {
             return state.users
+        },
+        roles(state) {
+            return state.roles
+        },
+        current(state) {
+            return state.current
+        },
+        isAdmin(state) {
+            return state.current ? state.current.role === 'admin' : false
         }
     },
     mutations: {
         load(state, payload) {
             state.users = payload
+        },
+        set(state, payload) {
+            state.current = payload
+
+            localStorage.setItem(USER_KEY, JSON.stringify(payload))
+        },
+        reset(state) {
+            state.current = null
+
+            localStorage.removeItem(USER_KEY)
         },
         add(state, payload) {
             const index = state.users.findIndex(item => item.id === payload.id)
@@ -42,7 +69,7 @@ export default {
         }
     },
     actions: {
-        async load({ commit }) {
+        async load({ commit, dispatch }) {
             try {
                 const { data } = await dbAxios.get('/users.json')
 
@@ -50,22 +77,9 @@ export default {
                     ...data[id],
                     id
                 })) : [])
-            } catch(e) {
-                console.log(e)
-            }
-        },
-        async create({ dispatch }, payload) {
-            const url = process.env.VUE_APP_SIGN_UP_URL + process.env.VUE_APP_FB_KEY
 
-            try {
-                const { data } = await axios.post(url, {
-                    ...payload,
-                    returnSecureToken: true
-                })
-
-                await dispatch('add', {
-                    ...payload,
-                    id: data.name
+                commit('clearMessage', null, {
+                    root: true
                 })
             } catch(e) {
                 dispatch('setMessage', {
@@ -76,39 +90,113 @@ export default {
                 })
             }
         },
-        async add({ commit }, payload) {
+        async set({ commit, dispatch }, id) {
             try {
-                const token = store.getters['auth/token']
-                const { data } = await dbAxios.post(`/users.json?auth=${token}`, payload)
+                const { data } = await dbAxios.get(`/users/${id}.json`)
 
-                commit('add', {
-                    ...payload,
-                    id: data.name
+                const {
+                    name,
+                    role
+                } = data
+
+                commit('set', {
+                    id,
+                    name,
+                    role
+                })
+
+                commit('clearMessage', null, {
+                    root: true
                 })
             } catch(e) {
-                console.log(e)
+                dispatch('setMessage', {
+                    value: error(e.response.data.error.message),
+                    type: 'danger'
+                }, {
+                    root: true
+                })
             }
         },
-        async update({ commit }, payload) {
-            const { id, ...item } = payload
+        async create({ dispatch }, payload) {
+            const url = SIGN_UP_URL + FB_KEY
 
             try {
-                const token = store.getters['auth/token']
-                await dbAxios.patch(`/users/${id}.json?auth=${token}`, item)
+                const { data } = await axios.post(url, {
+                    ...payload,
+                    returnSecureToken: true
+                })
+
+                const id = data.localId
+
+                await dispatch('add', {
+                    id,
+                    ...payload
+                })
+            } catch(e) {
+                dispatch('setMessage', {
+                    value: error(e.response.data.error.message),
+                    type: 'danger'
+                }, {
+                    root: true
+                })
+            }
+        },
+        async add({ commit, dispatch }, payload) {
+            try {
+                const { id, ...user } = payload
+
+                await dbAxios.put(`/users/${id}.json`, user)
+
+                commit('add', payload)
+
+                commit('clearMessage', null, {
+                    root: true
+                })
+            } catch(e) {
+                dispatch('setMessage', {
+                    value: error(e.response.data.error.message),
+                    type: 'danger'
+                }, {
+                    root: true
+                })
+            }
+        },
+        async update({ commit, dispatch }, payload) {
+            const { id, ...user } = payload
+
+            try {
+                await dbAxios.patch(`/users/${id}.json`, user)
 
                 commit('update', payload)
+
+                commit('clearMessage', null, {
+                    root: true
+                })
             } catch(e) {
-                console.log(e)
+                dispatch('setMessage', {
+                    value: error(e.response.data.error.message),
+                    type: 'danger'
+                }, {
+                    root: true
+                })
             }
         },
-        async remove({ commit }, id) {
+        async remove({ commit, dispatch }, id) {
             try {
-                const token = store.getters['auth/token']
-                await dbAxios.delete(`/users/${id}.json?auth=${token}`)
+                await dbAxios.delete(`/users/${id}.json`)
 
                 commit('remove', id)
+
+                commit('clearMessage', null, {
+                    root: true
+                })
             } catch(e) {
-                console.log(e)
+                dispatch('setMessage', {
+                    value: error(e.response.data.error.message),
+                    type: 'danger'
+                }, {
+                    root: true
+                })
             }
         }
     }

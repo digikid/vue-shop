@@ -9,9 +9,17 @@ export function useSignInForm() {
     const router = useRouter()
     const route = useRoute()
 
-    const { handleSubmit, isSubmitting, submitCount } = useForm()
+    const {
+        handleSubmit,
+        isSubmitting,
+        submitCount
+    } = useForm()
 
-    const { value: email, errorMessage: emailError, handleBlur: emailBlur } = useField(
+    const {
+        value: email,
+        errorMessage: emailError,
+        handleBlur: emailBlur
+    } = useField(
         'email',
         yup
             .string()
@@ -22,7 +30,11 @@ export function useSignInForm() {
 
     const passwordLength = 6
 
-    const { value: password, errorMessage: passwordError, handleBlur: passwordBlur } = useField(
+    const {
+        value: password,
+        errorMessage: passwordError,
+        handleBlur: passwordBlur
+    } = useField(
         'password',
         yup
             .string()
@@ -33,14 +45,14 @@ export function useSignInForm() {
 
     const isTooManyAttempts = computed(() => submitCount.value >= 3)
 
-    const isAdmin = computed(() => store.getters['auth/isAdmin'])
+    const isAdmin = computed(() => store.getters['users/isAdmin'])
 
     const onSubmit = handleSubmit(async values => {
         try {
             await store.dispatch('auth/signIn', values)
 
             if (route.path === '/auth') {
-                const path = isAdmin.value ? '/admin' : '/'
+                const path = isAdmin.value ? '/admin/orders' : '/'
                 router.push(path)
             }
         } catch(e) {

@@ -82,10 +82,10 @@ router.beforeEach((to, from, next) => {
     const requiredAuth = to.meta.auth
 
     if (requiredAuth && !store.getters['auth/isAuthenticated']) {
-        next('/auth?message=auth')
+        return next('/auth?message=auth')
     }
 
-    next()
+    return next()
 })
 
 export default router

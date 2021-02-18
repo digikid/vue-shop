@@ -71,6 +71,7 @@ import { ref } from 'vue'
 import { useRoute } from 'vue-router'
 import { useCart } from '@/use/cart'
 import { useAuth } from '@/use/auth'
+import { useUsers } from '@/use/users'
 
 export default {
   name: 'TheNavbar',
@@ -80,10 +81,13 @@ export default {
 
     const {
       isAuthenticated,
-      isAdmin,
-      user,
       logout
     } = useAuth()
+
+    const {
+      isAdmin,
+      user
+    } = useUsers()
 
     const { count: cartCount } = useCart()
 

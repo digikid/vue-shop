@@ -1,16 +1,23 @@
 import axios from 'axios'
-import store from '@/store'
 import { error } from '@/utils/error'
 
+const FB_KEY = process.env.VUE_APP_FB_KEY
+
 const TOKEN_KEY = process.env.VUE_APP_TOKEN_KEY
-const USER_KEY = process.env.VUE_APP_USER_KEY
+const REFRESH_KEY = process.env.VUE_APP_REFRESH_KEY
+const EXPIRES_KEY = process.env.VUE_APP_EXPIRES_KEY
+
+const SIGN_IN_URL = process.env.VUE_APP_SIGN_IN_URL
+const SIGN_UP_URL = process.env.VUE_APP_SIGN_UP_URL
+const REFRESH_URL = process.env.VUE_APP_REFRESH_URL
 
 export default {
     namespaced: true,
     state() {
         return {
             token: localStorage.getItem(TOKEN_KEY),
-            user: JSON.parse(localStorage.getItem(USER_KEY))
+            refreshToken: localStorage.getItem(REFRESH_KEY),
+            expiresDate: new Date(localStorage.getItem(EXPIRES_KEY))
         }
     },
     getters: {
@@ -20,32 +27,35 @@ export default {
         isAuthenticated(_, getters) {
             return !!getters.token
         },
-        user(state) {
-            return state.user
-        },
-        isAdmin(state) {
-            return state.user ? state.user.role === 'admin' : false
+        isExpired(state) {
+            return new Date() >= state.expiresDate
         }
     },
     mutations: {
-        setToken(state, token) {
-            state.token = token
-            localStorage.setItem(TOKEN_KEY, token)
-        },
-        setUser(state, user) {
-            state.user = user
-            localStorage.setItem(USER_KEY, JSON.stringify(user))
+        setToken(state, { refreshToken, idToken, expiresIn = '3600' }) {
+            const expiresDate = new Date(new Date().getTime() + Number(expiresIn) * 1000)
+
+            state.token = idToken
+            state.refreshToken = refreshToken
+            state.expiresDate = expiresDate
+
+            localStorage.setItem(TOKEN_KEY, idToken)
+            localStorage.setItem(REFRESH_KEY, refreshToken)
+            localStorage.setItem(EXPIRES_KEY, expiresDate.toString())
         },
         logout(state) {
             state.token = null
-            state.user = null
+            state.refreshToken = null
+            state.expiresDate = null
+
             localStorage.removeItem(TOKEN_KEY)
-            localStorage.removeItem(USER_KEY)
+            localStorage.removeItem(REFRESH_KEY)
+            localStorage.removeItem(EXPIRES_KEY)
         }
     },
     actions: {
         async signIn({ commit, dispatch }, payload) {
-            const url = process.env.VUE_APP_SIGN_IN_URL + process.env.VUE_APP_FB_KEY
+            const url = SIGN_IN_URL + FB_KEY
 
             try {
                 const { data } = await axios.post(url, {
@@ -53,16 +63,11 @@ export default {
                     returnSecureToken: true
                 })
 
-                const { idToken: token } = data
+                const id = data.localId
 
-                const user = store.getters['users/items'].find(user => user.email === payload.email)
+                commit('setToken', data)
 
-                delete user.password
-
-                commit('setUser', user)
-                commit('setToken', token)
-
-                commit('clearMessage', null, {
+                await dispatch('users/set', id, {
                     root: true
                 })
             } catch(e) {
@@ -75,9 +80,7 @@ export default {
             }
         },
         async signUp({ commit, dispatch }, payload) {
-            const url = process.env.VUE_APP_SIGN_UP_URL + process.env.VUE_APP_FB_KEY
-
-            console.log(payload)
+            const url = SIGN_UP_URL + FB_KEY
 
             try {
                 const { data } = await axios.post(url, {
@@ -85,23 +88,18 @@ export default {
                     returnSecureToken: true
                 })
 
-                const { idToken: token } = data
+                const id = data.localId
 
-                const user = {
-                    ...payload,
-                    id: data.name
-                }
+                commit('setToken', data)
 
-                delete user.password
-
-                commit('setUser', user)
-                commit('setToken', token)
-
-                await dispatch('users/add', user, {
+                await dispatch('users/add', {
+                    id,
+                    ...payload
+                }, {
                     root: true
                 })
 
-                commit('clearMessage', null, {
+                await dispatch('users/set', id, {
                     root: true
                 })
             } catch(e) {
@@ -111,6 +109,24 @@ export default {
                 }, {
                     root: true
                 })
+            }
+        },
+        async refresh({ state, commit }) {
+            const url = REFRESH_URL + FB_KEY
+
+            try {
+                const { data } = await axios.post(url, {
+                    grant_type: 'refresh_token',
+                    refresh_token: state.refreshToken
+                })
+
+                commit('setToken', {
+                    refreshToken: data.refresh_token,
+                    idToken: data.id_token,
+                    expiresIn: data.expires_in
+                })
+            } catch(e) {
+                console.log(e)
             }
         }
     }

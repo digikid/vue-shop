@@ -25,6 +25,7 @@
 import { useCart } from '@/use/cart'
 import { useAuth } from '@/use/auth'
 import { useOrders } from '@/use/orders'
+import { useUsers } from '@/use/users'
 import { currency } from '@/utils/format/currency'
 
 import CartTable from '@/components/cart/CartTable'
@@ -41,19 +42,16 @@ export default {
       total
     } = useCart()
 
-    const {
-      isAuthenticated,
-      user
-    } = useAuth()
+    const { isAuthenticated } = useAuth()
+
+    const { user } = useUsers()
 
     const { add: addOrder } = useOrders()
 
-    const buyHandler = async () => {
-      await addOrder({
-        user: user.value,
-        items: items.value
-      })
-    }
+    const buyHandler = async () => await addOrder({
+      user: user.value,
+      items: items.value
+    })
 
     return {
       items,

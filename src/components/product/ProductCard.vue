@@ -62,4 +62,8 @@ export default {
   width: 215px;
   height: 200px;
 }
+
+.product-card .btn {
+  margin: 0;
+}
 </style>

@@ -9,9 +9,17 @@ export function useSingUpForm() {
     const router = useRouter()
     const route = useRoute()
 
-    const { handleSubmit, isSubmitting, submitCount } = useForm()
+    const {
+        handleSubmit,
+        isSubmitting,
+        submitCount
+    } = useForm()
 
-    const { value: name, errorMessage: nameError, handleBlur: nameBlur } = useField(
+    const {
+        value: name,
+        errorMessage: nameError,
+        handleBlur: nameBlur
+    } = useField(
         'name',
         yup
             .string()
@@ -19,7 +27,11 @@ export function useSingUpForm() {
             .required('Пожалуйста, введите имя')
     )
 
-    const { value: email, errorMessage: emailError, handleBlur: emailBlur } = useField(
+    const {
+        value: email,
+        errorMessage: emailError,
+        handleBlur: emailBlur
+    } = useField(
         'email',
         yup
             .string()
@@ -30,7 +42,11 @@ export function useSingUpForm() {
 
     const passwordLength = 6
 
-    const { value: password, errorMessage: passwordError, handleBlur: passwordBlur } = useField(
+    const {
+        value: password,
+        errorMessage: passwordError,
+        handleBlur: passwordBlur
+    } = useField(
         'password',
         yup
             .string()
@@ -41,7 +57,7 @@ export function useSingUpForm() {
 
     const isTooManyAttempts = computed(() => submitCount.value >= 3)
 
-    const isAdmin = computed(() => store.getters['auth/isAdmin'])
+    const isAdmin = computed(() => store.getters['users/isAdmin'])
 
     const onSubmit = handleSubmit(async values => {
         try {
@@ -51,7 +67,7 @@ export function useSingUpForm() {
             })
 
             if (route.path === '/auth') {
-                const path = isAdmin.value ? '/admin' : '/'
+                const path = isAdmin.value ? '/admin/orders' : '/'
                 router.push(path)
             }
         } catch(e) {

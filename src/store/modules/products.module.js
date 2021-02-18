@@ -1,5 +1,5 @@
 import dbAxios from '@/axios/db'
-import store from '@/store'
+import { error } from '@/utils/error'
 
 export default {
     namespaced: true,
@@ -40,7 +40,7 @@ export default {
         }
     },
     actions: {
-        async load({ commit }) {
+        async load({ commit, dispatch }) {
             try {
                 const { data } = await dbAxios.get(`/products.json`)
 
@@ -49,42 +49,59 @@ export default {
                     id
                 })) : [])
             } catch(e) {
-                console.log(e)
+                dispatch('setMessage', {
+                    value: error(e.response.data.error.message),
+                    type: 'danger'
+                }, {
+                    root: true
+                })
             }
         },
-        async add({ commit }, payload) {
+        async add({ commit, dispatch }, payload) {
             try {
-                const token = store.getters['auth/token']
-                const { data } = await dbAxios.post(`/products.json?auth=${token}`, payload)
+                const { data } = await dbAxios.post('/products.json', payload)
 
                 commit('add', {
                     ...payload,
                     id: data.name
                 })
             } catch(e) {
-                console.log(e)
+                dispatch('setMessage', {
+                    value: error(e.response.data.error.message),
+                    type: 'danger'
+                }, {
+                    root: true
+                })
             }
         },
-        async update({ commit }, payload) {
+        async update({ commit, dispatch }, payload) {
             const { id, ...item } = payload
 
             try {
-                const token = store.getters['auth/token']
-                await dbAxios.patch(`/products/${id}.json?auth=${token}`, item)
+                await dbAxios.patch(`/products/${id}.json`, item)
 
                 commit('update', payload)
             } catch(e) {
-                console.log(e)
+                dispatch('setMessage', {
+                    value: error(e.response.data.error.message),
+                    type: 'danger'
+                }, {
+                    root: true
+                })
             }
         },
-        async remove({ commit }, id) {
+        async remove({ commit, dispatch }, id) {
             try {
-                const token = store.getters['auth/token']
-                await dbAxios.delete(`/products/${id}.json?auth=${token}`)
+                await dbAxios.delete(`/products/${id}.json`)
 
                 commit('remove', id)
             } catch(e) {
-                console.log(e)
+                dispatch('setMessage', {
+                    value: error(e.response.data.error.message),
+                    type: 'danger'
+                }, {
+                    root: true
+                })
             }
         }
     }

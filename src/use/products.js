@@ -8,6 +8,8 @@ export function useProducts() {
     const router = useRouter()
     const route = useRoute()
 
+    const isEditing = ref()
+
     const filter = ref({
         category: route.query.category || '',
         title: route.query.title || ''
@@ -30,8 +32,6 @@ export function useProducts() {
 
         return true
     }))
-
-    const isEditing = ref()
 
     const price = computed(() => item => currency(item.price))
 
